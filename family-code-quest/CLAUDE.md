@@ -13,10 +13,17 @@ The kid codes *with AI*, so the syllabus must hold two mental models apart and n
 - 🤖 **The computer / Scratch blocks** = a careful but *not-clever* robot. Does **exactly what you SAY**, step by step. Be precise; order matters.
 - 🧠 **The AI** = a *clever* helper. You tell it **what you MEAN** in plain words; it writes the steps — but it can be wrong, so you **try it and fix it**.
 
+For the kid (6–7), teach this **concretely, not abstractly**: a *robot that only moves when you push a button* vs *a friend who just hears "let's build a tower!" and helps.* Avoid the abstract "say vs mean" wording in the lesson text — that's the adult framing of the same idea.
+
 Rules when authoring:
 - Never teach "be exact or it won't work" as a universal truth. That's the **computer's** nature, not the AI's. Scope literal/exact lessons to "the computer/blocks."
-- The dedicated lesson is **Day 2 — "Two Helpers: the Computer & the AI."** Reinforce the contrast in later review days and build missions.
+- The dedicated lesson is **Day 2 — "Two Helpers: the Computer & the AI"** (robot vs friend). Reinforce the contrast in later review days and build missions.
 - Build missions = AI mindset: *describe what you want → try it → fix it together.*
+
+## Reading level (kid is 6–7, beginning to read)
+- Short sentences (aim ~5–8 words). One idea per screen. Concrete pictures over abstract words.
+- Read-aloud (🔊) carries the load — but keep option text to a few simple words so a beginning reader can try.
+- Prefer everyday nouns the kid knows (robot, friend, socks, cookies) over jargon (instructions, exactly, understands).
 
 ## Stack & philosophy
 - A single self-contained **`index.html`** — vanilla HTML/CSS/JS. **No build step, no framework, no npm dependencies.** Only external resource is Google Fonts (Fredoka + Nunito) via CDN.
