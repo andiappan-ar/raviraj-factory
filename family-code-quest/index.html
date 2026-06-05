@@ -201,10 +201,10 @@ const LEARNER = { defName:'Raviraj', role:'The Explorer', ava:'🦊', tool:'Scra
 const WEEKS = {
   1:{ title:'Telling the Computer What to Do',
       build:{ icon:'🛠️',
-        text:'Make your cat walk across the screen and say "Hi!". Ask a grown-up to help, then ask the AI helper: "How do I make my Scratch cat move and talk?"' } },
+        text:'Make your cat walk across the screen and say "Hi!". The AI is your smart helper — tell it what you WANT: ask "How do I make my Scratch cat move and then say hi?" Try what it shows you, and fix it together. 🛠️' } },
   2:{ title:'Repeating & Reacting',
       build:{ icon:'🛠️',
-        text:'Make your cat bounce around the screen forever! Then ask the AI helper to make it change colour while it bounces. 🌈' } }
+        text:'Make your cat bounce around the screen forever! Then ask your smart AI helper to make it change colour while it bounces. Try it — and if it\'s not right, tell the AI and fix it together. 🌈' } }
 };
 
 /* ---------- The Curriculum (one track — kid level) ---------- */
@@ -217,15 +217,23 @@ const CURRICULUM = [
       {q:'Who follows the steps?', o:[{e:'💻',t:'The computer'},{e:'🐶',t:'The dog'}], a:0}
     ]},
 
-  { day:2, week:1, title:'Exact Instructions', emoji:'🤖',
-    concept:'Computers are a bit silly! 🤖 They do EXACTLY what you tell them. If you say "put on shoes" before "put on socks", you get shoes with no socks! So we tell them very carefully.',
+  { day:2, week:1, title:'Two Helpers: the Computer & the AI', emoji:'🤝',
+    concept:'You have TWO helpers! 🤖 The COMPUTER is like a careful robot — it does EXACTLY what you say, even if you make a mistake. It is not clever. 🧠 The AI is like a smart friend — you tell it what you WANT in your own words, and it figures out the steps for you! The AI can be wrong too, so you always try it and fix it. 🛠️',
     quiz:[
-      {q:'You tell a robot "spread the jam" before "open the jar". What happens?', o:[{e:'🫙',t:'It can\'t — jar is shut!'},{e:'🥪',t:'Yummy sandwich'}], a:0},
-      {q:'Computers do what you...', o:[{e:'🎯',t:'Say, exactly'},{e:'🌟',t:'Wish for'}], a:0},
-      {q:'Are computers clever like people?', o:[{e:'🤖',t:'No — they need exact steps'},{e:'🧠',t:'Yes, super smart'}], a:0}
+      {q:'Which helper is clever and understands what you MEAN?', o:[{e:'🤖',t:'The computer'},{e:'🧠',t:'The smart AI'}], a:1},
+      {q:'Which helper does EXACTLY what you say — even your mistakes?', o:[{e:'🤖',t:'The computer'},{e:'🧠',t:'The AI'}], a:0},
+      {q:'You tell the AI what you WANT, and it...', o:[{e:'🛠️',t:'Writes the steps for you'},{e:'😴',t:'Goes to sleep'}], a:0}
     ]},
 
-  { day:3, week:1, title:'Order Matters', emoji:'🔢',
+  { day:3, week:1, title:'Exact Instructions (for the Computer)', emoji:'🤖',
+    concept:'Remember the computer helper? It is a bit silly! 🤖 It does EXACTLY what you tell it. If you say "put on shoes" before "put on socks", you get shoes with no socks! So when we give the COMPUTER steps, we are very careful. (The AI is clever — but the computer is not.)',
+    quiz:[
+      {q:'You tell a robot "spread the jam" before "open the jar". What happens?', o:[{e:'🫙',t:'It can\'t — jar is shut!'},{e:'🥪',t:'Yummy sandwich'}], a:0},
+      {q:'The computer does what you...', o:[{e:'🎯',t:'Say, exactly'},{e:'🌟',t:'Wish for'}], a:0},
+      {q:'Is the computer clever like the AI?', o:[{e:'🧠',t:'Yes, super smart'},{e:'🤖',t:'No — it needs exact steps'}], a:1}
+    ]},
+
+  { day:4, week:1, title:'Order Matters', emoji:'🔢',
     concept:'The ORDER of your steps matters! 🔢 You put on socks 🧦 and THEN shoes 👟 — not the other way round. Mixing up the order makes silly things happen.',
     quiz:[
       {q:'What goes on first?', o:[{e:'🧦',t:'Socks, then shoes'},{e:'👟',t:'Shoes, then socks'}], a:0},
@@ -233,7 +241,7 @@ const CURRICULUM = [
       {q:'Does the order of steps matter?', o:[{e:'🔢',t:'Yes it does!'},{e:'🤷',t:'Nope'}], a:0}
     ]},
 
-  { day:4, week:1, title:'Meet Scratch: Sprites & the Green Flag', emoji:'🐱',
+  { day:5, week:1, title:'Meet Scratch: Sprites & the Green Flag', emoji:'🐱',
     concept:'In Scratch, the cat 🐱 is called a SPRITE — your little character. When you press the green flag 🏁, your program starts. Green flag means GO!',
     quiz:[
       {q:'The cat in Scratch is called a...', o:[{e:'🐱',t:'Sprite'},{e:'🐶',t:'Doggo'}], a:0},
@@ -241,15 +249,16 @@ const CURRICULUM = [
       {q:'Green flag means...', o:[{e:'▶️',t:'GO!'},{e:'✋',t:'STOP'}], a:0}
     ]},
 
-  { day:5, week:1, title:'Make It Move! (+ Week Review)', emoji:'👟',
+  { day:6, week:1, title:'Make It Move! (+ Week Review)', emoji:'👟',
     concept:'Motion blocks make the cat MOVE! ➡️ "Move 10 steps" slides it along, and "turn" spins it. Try it: green flag 🏁 → move → watch your cat go!',
     quiz:[
       {q:'Which block makes the cat move?', o:[{e:'➡️',t:'Move block'},{e:'🔊',t:'Sound block'}], a:0},
+      {q:'Which helper understands what you MEAN?', o:[{e:'🧠',t:'The AI'},{e:'🤖',t:'The computer'}], a:0},
       {q:'A program is a list of...', o:[{e:'📋',t:'Steps'},{e:'🍬',t:'Snacks'}], a:0},
       {q:'What starts your program?', o:[{e:'🏁',t:'Green flag'},{e:'🌙',t:'Nothing'}], a:0}
     ]},
 
-  { day:6, week:2, title:'Events: When This, Do That', emoji:'👆',
+  { day:7, week:2, title:'Events: When This, Do That', emoji:'👆',
     concept:'An EVENT is when something happens! 👆 "When I click the cat → it meows 🔊". When ___ happens, do ___ !',
     quiz:[
       {q:'"When I click → cat meows". Clicking is the...', o:[{e:'👆',t:'Event'},{e:'🍬',t:'Snack'}], a:0},
@@ -257,7 +266,7 @@ const CURRICULUM = [
       {q:'When the flag is clicked, the program...', o:[{e:'🏁',t:'Starts'},{e:'🙈',t:'Hides'}], a:0}
     ]},
 
-  { day:7, week:2, title:'Loops: Repeat!', emoji:'🔁',
+  { day:8, week:2, title:'Loops: Repeat!', emoji:'🔁',
     concept:'A LOOP repeats steps so you don\'t have to write them again and again! 🔁 "Repeat 4 times: move + turn" draws a square! ⬛',
     quiz:[
       {q:'A loop helps you...', o:[{e:'🔁',t:'Repeat steps'},{e:'😴',t:'Take a nap'}], a:0},
@@ -265,7 +274,7 @@ const CURRICULUM = [
       {q:'Loops save us from...', o:[{e:'😅',t:'Writing the same thing lots'},{e:'🎉',t:'Having fun'}], a:0}
     ]},
 
-  { day:8, week:2, title:'Forever Loops', emoji:'♾️',
+  { day:9, week:2, title:'Forever Loops', emoji:'♾️',
     concept:'A FOREVER loop never stops! ♾️ "Forever: move" makes the cat go and go and go! It\'s great for things that should keep happening.',
     quiz:[
       {q:'A forever loop stops...', o:[{e:'♾️',t:'Never!'},{e:'⏱️',t:'Right away'}], a:0},
@@ -273,7 +282,7 @@ const CURRICULUM = [
       {q:'To stop a forever loop you press...', o:[{e:'🛑',t:'The red stop'},{e:'🌙',t:'Nothing'}], a:0}
     ]},
 
-  { day:9, week:2, title:'Putting It Together: Motion + Loops', emoji:'🎬',
+  { day:10, week:2, title:'Putting It Together: Motion + Loops', emoji:'🎬',
     concept:'Mix them together! 🎬 "Forever: move 10, if on edge bounce" makes the cat bounce around like a ball! ⚽ Blocks work as a team.',
     quiz:[
       {q:'To make the cat bounce around, you use move AND a...', o:[{e:'🔁',t:'Loop'},{e:'🍬',t:'Snack'}], a:0},
@@ -281,9 +290,10 @@ const CURRICULUM = [
       {q:'"If on edge, bounce" stops the cat from...', o:[{e:'📺',t:'Going off the screen'},{e:'🔊',t:'Meowing'}], a:0}
     ]},
 
-  { day:10, week:2, title:'Big Review & Trophy Quiz', emoji:'🏆',
-    concept:'You learned SO much! 🏆 Programs, sprites, the green flag, loops and forever. Let\'s do one happy review quiz and grab your trophy! 🎉',
+  { day:11, week:2, title:'Big Review & Trophy Quiz', emoji:'🏆',
+    concept:'You learned SO much! 🏆 Two helpers (the computer & the AI), programs, sprites, the green flag, loops and forever. Let\'s do one happy review quiz and grab your trophy! 🎉',
     quiz:[
+      {q:'Which helper is clever and understands what you MEAN?', o:[{e:'🧠',t:'The AI'},{e:'🤖',t:'The computer'}], a:0},
       {q:'What repeats steps for you?', o:[{e:'🔁',t:'A loop'},{e:'🍬',t:'A snack'}], a:0},
       {q:'What starts your program?', o:[{e:'🏁',t:'Green flag'},{e:'🛑',t:'Red stop'}], a:0},
       {q:'The cat character is a...', o:[{e:'🐱',t:'Sprite'},{e:'🐟',t:'Fish'}], a:0},

@@ -6,9 +6,16 @@ Teach **thinking like a builder** — decomposition, logic, and *directing AI* �
 
 Daily rhythm: ~10–15 min (concept → quiz). Weekly: one "build it with AI" mission.
 
+### Core distinction (runs through the whole syllabus)
+The kid will *code with AI*, so the syllabus must keep two mental models clearly apart:
+- 🤖 **The computer / the blocks** = a careful but *not-clever* robot. It does **exactly what you SAY**, step by step. Be precise; order matters.
+- 🧠 **The AI** = a *clever* helper. You tell it **what you MEAN** in your own words and it writes the steps — but it can be wrong, so you **try it and fix it**.
+
+Never teach "be exact or it won't work" as a blanket rule — that's true for the computer, not the AI. Scope literal-computer lessons to "the computer/blocks," and pair them with the AI contrast.
+
 ## Status
-- ✅ **Week 1 — Telling the Computer What to Do** (Days 1–5): what a program is, exact instructions, order/sequence, sprites & the green flag, motion + review.
-- ✅ **Week 2 — Repeating & Reacting** (Days 6–10): events, loops, forever loops, combining motion + loops, big review.
+- ✅ **Week 1 — Telling the Computer What to Do** (Days 1–6): what a program is, **two helpers (computer vs AI)**, exact instructions (computer), order/sequence, sprites & the green flag, motion + review.
+- ✅ **Week 2 — Repeating & Reacting** (Days 7–11): events, loops, forever loops, combining motion + loops, big review.
 - ⬜ Weeks 3–10 below.
 
 ## To build
@@ -47,6 +54,7 @@ Build: pick one idea and ship it.
 
 ## Authoring notes
 - Keep the track readable aloud and free of typing-heavy tasks (ScratchJr has no text coding).
-- Reuse earlier ideas in later quizzes to reinforce (spaced repetition).
+- Reuse earlier ideas in later quizzes to reinforce (spaced repetition) — including the computer-vs-AI distinction.
 - Each new week: add a `WEEKS[n]` entry in `index.html` and remove its line from `FUTURE`.
 - Single track only — keep everything at kid (5–7 year old) reading level.
+- Honour the computer-vs-AI distinction: "exact/literal" lessons are about the computer; "describe what you want, then check & fix" is about the AI.

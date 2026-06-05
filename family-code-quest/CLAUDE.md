@@ -8,6 +8,16 @@ A day-by-day coding curriculum + quiz web app built for **one young learner**:
 
 This is a **single-track, kid-only** syllabus. There is no second (grownup/parent) learner track. The goal is teaching **computational thinking + directing AI**, not syntax memorization. Tone is warm and encouraging; wrong answers are never punished.
 
+## Core principle: computer ≠ AI (keep these distinct)
+The kid codes *with AI*, so the syllabus must hold two mental models apart and never blur them:
+- 🤖 **The computer / Scratch blocks** = a careful but *not-clever* robot. Does **exactly what you SAY**, step by step. Be precise; order matters.
+- 🧠 **The AI** = a *clever* helper. You tell it **what you MEAN** in plain words; it writes the steps — but it can be wrong, so you **try it and fix it**.
+
+Rules when authoring:
+- Never teach "be exact or it won't work" as a universal truth. That's the **computer's** nature, not the AI's. Scope literal/exact lessons to "the computer/blocks."
+- The dedicated lesson is **Day 2 — "Two Helpers: the Computer & the AI."** Reinforce the contrast in later review days and build missions.
+- Build missions = AI mindset: *describe what you want → try it → fix it together.*
+
 ## Stack & philosophy
 - A single self-contained **`index.html`** — vanilla HTML/CSS/JS. **No build step, no framework, no npm dependencies.** Only external resource is Google Fonts (Fredoka + Nunito) via CDN.
 - Must keep working in **three** environments without changes:
@@ -62,7 +72,7 @@ The learner name is stored under `fcq:name` (default: Raviraj).
 6. Verify: open the file, play the new day, confirm the dashboard counts update.
 
 ## Pending content (roadmap)
-Weeks 1–2 are written (Days 1–10). Still to build, keeping ScratchJr-appropriate (no typing-heavy tasks):
+Weeks 1–2 are written (Days 1–11; Week 1 = Days 1–6, Week 2 = Days 7–11). Still to build, keeping ScratchJr-appropriate (no typing-heavy tasks):
 - Week 3 — Decisions: if / then
 - Week 4 — Comparing & sensing (is it touching? is it bigger?)
 - Week 5 — Variables: the computer's memory (keep a score)
