@@ -1,13 +1,12 @@
-# CLAUDE.md — Family Code Quest
+# CLAUDE.md — Code Quest
 
 Context for Claude Code working on this project. Read this fully before editing.
 
 ## What this is
-A day-by-day coding curriculum + quiz web app built for one family:
-- **Raviraj** — the son, under 8, **ScratchJr** track (`track: 'kid'`). Short, playful, emoji-heavy, read-aloud.
-- **Anusha** — the wife, complete beginner, **Scratch** track (`track: 'grownup'`). One level deeper, with "why" explanations.
+A day-by-day coding curriculum + quiz web app built for **one young learner**:
+- **Raviraj** — the son, under 8, **ScratchJr** track. Short, playful, emoji-heavy, read-aloud.
 
-The goal is teaching **computational thinking + directing AI**, not syntax memorization. Tone is warm and encouraging; wrong answers are never punished.
+This is a **single-track, kid-only** syllabus. There is no second (grownup/parent) learner track. The goal is teaching **computational thinking + directing AI**, not syntax memorization. Tone is warm and encouraging; wrong answers are never punished.
 
 ## Stack & philosophy
 - A single self-contained **`index.html`** — vanilla HTML/CSS/JS. **No build step, no framework, no npm dependencies.** Only external resource is Google Fonts (Fredoka + Nunito) via CDN.
@@ -23,12 +22,12 @@ The goal is teaching **computational thinking + directing AI**, not syntax memor
 
 ## Architecture (everything lives in the `<script>` in index.html)
 - **`Store`** — storage abstraction. Tries `window.storage` (Claude artifact API, async) → `localStorage` → in-memory object. Always `await Store.get(key)` / `await Store.set(key, value)`. **Never call `localStorage`/`sessionStorage`/cookies directly** — going through `Store` is what keeps all three environments working.
-- **`PROFILES`** — the two learners (`son`, `wife`): track, avatar, color vars, tool, default name.
+- **`LEARNER`** — the one learner (role, avatar, default name, tool).
 - **`CURRICULUM`** — array of *day objects*. **This is the content you edit to add lessons.**
-- **`WEEKS`** — per-week `title` + a dual-track weekly `build` mission.
+- **`WEEKS`** — per-week `title` + a weekly `build` mission.
 - **`FUTURE`** — roadmap labels shown for weeks not yet built.
-- **Screen render functions** (each rewrites `#app`): `renderPicker` → `renderRoadmap` → `openDay` (concept) → `startQuiz`/`renderQuestion`/`answer`/`nextQ` → `finishQuiz`; plus `renderDashboard` (parent view: per-learner stats, weekly review, recent activity).
-- **`speak()`** — read-aloud via `SpeechSynthesis` (used on the kid track).
+- **Screen render functions** (each rewrites `#app`): `renderHome` → `renderRoadmap` → `openDay` (concept) → `startQuiz`/`renderQuestion`/`answer`/`nextQ` → `finishQuiz`; plus `renderDashboard` (parent view: stats, weekly review, recent activity).
+- **`speak()`** — read-aloud via `SpeechSynthesis`.
 - **Confetti** — small canvas burst on good scores (`miniBurst`, `bigConfetti`).
 - **`sattr()`** — escapes strings for safe embedding inside inline `onclick='...'` attributes (apostrophes/quotes). Use it whenever passing text into an inline handler.
 
@@ -37,39 +36,33 @@ A day object:
 ```js
 {
   day: 11, week: 3, title: "If / Then", emoji: "🔀",
-  concept: { kid: "short, warm, emoji...", grownup: "a bit deeper..." },
-  quiz: {
-    kid: [
-      { q: "question?", o: [ {e:"🍪", t:"Recipe"}, {e:"😴", t:"Nap"} ], a: 0 }
-    ],
-    grownup: [
-      { q: "question?", o: [ {t:"Right answer"}, {t:"Distractor"} ], a: 0, ex: "why it's right" }
-    ]
-  }
+  concept: "short, warm, emoji-rich, read-aloud sentence...",
+  quiz: [
+    { q: "question?", o: [ {e:"🍪", t:"Recipe"}, {e:"😴", t:"Nap"} ], a: 0 }
+  ]
 }
 ```
 Rules:
 - `a` = index of the correct option. The renderer highlights the correct one regardless of position; vary positions so it isn't always first.
-- **kid quiz**: 3 questions, an emoji (`e`) on every option, no `ex`. Keep reading level very low (a 5–7 year old, often read to by a parent).
-- **grownup quiz**: 4–5 questions, include `ex` (the "why") on each. No emoji needed on options.
+- **quiz**: 3 questions (4 for a week-review day), an emoji (`e`) on every option. Keep reading level very low (a 5–7 year old, often read to by a parent). No "why" explanations — this is the kid track.
 - Feedback copy must stay gentle. Do not add scoring that shames wrong answers.
 
-Progress is stored per learner under key `fcq:progress:<son|wife>`:
+Progress is stored under key `fcq:progress`:
 ```js
 { completed: { [day]: stars1to3 }, dates: { [day]: ISO }, builds: { [week]: ISO | false }, lastActive: ISO }
 ```
-Names under `fcq:names` → `{ son, wife }` (defaults: Raviraj / Anusha).
+The learner name is stored under `fcq:name` (default: Raviraj).
 
 ## How to add lessons (the most common task)
 1. Find the `CURRICULUM` array in `index.html`.
 2. Copy an existing day object; set the new `day` number and its `week`.
-3. Write `concept.kid` + `concept.grownup`, then `quiz.kid` (3 Q) and `quiz.grownup` (4–5 Q with `ex`).
-4. If it starts a new week, add a `WEEKS[n]` entry (`title` + dual-track `build`) and delete that week's line from `FUTURE`.
+3. Write `concept` (one warm, emoji-rich sentence) and `quiz` (3 questions, emoji on each option).
+4. If it starts a new week, add a `WEEKS[n]` entry (`title` + `build`) and delete that week's line from `FUTURE`.
 5. That's it — days unlock sequentially and render on the map automatically; no other wiring.
-6. Verify: open the file, play the new day on **both** profiles, confirm the dashboard counts update.
+6. Verify: open the file, play the new day, confirm the dashboard counts update.
 
 ## Pending content (roadmap)
-Weeks 1–2 are written (Days 1–10). Still to build, keeping ScratchJr-appropriate for the kid track (no typing-heavy tasks) and Scratch for the grownup track:
+Weeks 1–2 are written (Days 1–10). Still to build, keeping ScratchJr-appropriate (no typing-heavy tasks):
 - Week 3 — Decisions: if / then
 - Week 4 — Comparing & sensing (is it touching? is it bigger?)
 - Week 5 — Variables: the computer's memory (keep a score)
@@ -85,12 +78,13 @@ See `ROADMAP.md` for per-week concept notes.
 - No build step, no framework, no npm deps. One static file.
 - Never touch `localStorage`/`sessionStorage`/cookies directly — use `Store`.
 - Don't break the three-environment storage fallback.
-- Don't make wrong-answer feedback harsh; keep the kid track's reading level low.
+- Don't make wrong-answer feedback harsh; keep the reading level low.
+- Keep it single-track (kid only). Don't reintroduce a second learner track.
 - Keep changes to `index.html` unless told to migrate.
 
 ## Future: cross-device sync version (separate track — only when asked)
 `localStorage` is per-device, so a parent can't monitor from their own phone. For real sync, migrate to **Next.js + Supabase**:
-- Tables: `learners(id, name, track, avatar)`, `progress(learner_id, day, stars, completed_at)`, `build_missions(learner_id, week, completed_at)`.
+- Tables: `learner(id, name, tool, avatar)`, `progress(learner_id, day, stars, completed_at)`, `build_missions(learner_id, week, completed_at)`.
 - Move `CURRICULUM`/`WEEKS` into a shared module; keep the same screen flow.
 - Replace `Store` with Supabase client calls; add magic-link auth so each device writes to the right learner and the dashboard reads live.
 Default remains the static single-file version.

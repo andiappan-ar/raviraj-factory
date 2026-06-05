@@ -1,8 +1,8 @@
-# Family Code Quest 🚀
+# Code Quest 🚀
 
-A tiny, day-by-day coding curriculum + quiz app for the family.
+A tiny, day-by-day coding curriculum + quiz app for one young learner — **Raviraj** (ScratchJr).
 
-Two learners — **Raviraj** (ScratchJr) and **Anusha** (Scratch). Each day is one small concept + a short quiz; each week ends with a "build it with AI" mission. A parent **Dashboard** shows daily progress and a weekly review.
+Each day is one small concept + a short quiz; each week ends with a "build it with AI" mission. A parent **Dashboard** shows daily progress and a weekly review.
 
 ## Run it
 - Open `index.html` in any browser, **or**
@@ -16,12 +16,12 @@ Two learners — **Raviraj** (ScratchJr) and **Anusha** (Scratch). Each day is o
 The full plan is in `ROADMAP.md`; the how-to is in `CLAUDE.md` → *How to add lessons*. In short: copy a day object in the `CURRICULUM` array inside `index.html`, change the text, done.
 
 ## Note on saved progress
-Progress is saved in each device's browser (localStorage). Perfect on one shared device — the dashboard shows both learners. It does **not** sync across separate devices. For cross-device monitoring, see the Supabase path in `CLAUDE.md`.
+Progress is saved in the browser (localStorage). Perfect on one device — the dashboard shows Raviraj's progress. It does **not** sync across separate devices. For cross-device monitoring, see the Supabase path in `CLAUDE.md`.
 
 ## Develop with Claude Code
 Open this folder in Claude Code — it automatically reads `CLAUDE.md`. Then ask, for example:
 
-> Add Week 3 (if/then decisions), Days 11–13, following the data model and dual-track rules in CLAUDE.md.
+> Add Week 3 (if/then decisions), Days 11–13, following the data model and kid-only rules in CLAUDE.md.
 
 or
 
