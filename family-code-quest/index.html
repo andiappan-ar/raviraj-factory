@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Code Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#fff4e6; --bg2:#ffe0c2; --bg3:#dbeeff;
+    --ink:#3a2c20; --ink-soft:#7a6655;
+    --card:#fffdf9; --line:#f0e3d2;
+    --son:#ff8a3d; --son-deep:#e8651a; --son-soft:#fff0e3;
+    --wife:#6c5ce7; --wife-deep:#4b3fc4; --wife-soft:#efecff;
+    --good:#2bb673; --good-soft:#e3f8ee;
+    --warn:#ff5d73;
+    --shadow:0 10px 0 rgba(58,44,32,.08), 0 18px 30px rgba(58,44,32,.12);
+    --accent:var(--son); --accent-deep:var(--son-deep); --accent-soft:var(--son-soft);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Nunito',sans-serif;color:var(--ink);min-height:100vh;
+    background:
+      radial-gradient(1200px 600px at 15% -10%, var(--bg3), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, var(--bg2), transparent 55%),
+      linear-gradient(160deg, var(--bg1), #fff8ef 60%);
+    background-attachment:fixed;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.04;z-index:0;
+    background-image:radial-gradient(var(--ink) 1px, transparent 1px);
+    background-size:7px 7px;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:22px 18px 80px;position:relative;z-index:1}
+  h1,h2,h3,.disp{font-family:'Fredoka',sans-serif;font-weight:600;letter-spacing:.3px}
+
+  /* ---- Top bar ---- */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Fredoka';font-size:1.45rem;color:var(--ink)}
+  .brand .logo{
+    width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:1.4rem;
+    background:linear-gradient(140deg,#ffd27a,#ff8a3d);box-shadow:var(--shadow);transform:rotate(-6deg)
+  }
+  .whoami{
+    display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--line);
+    border-radius:999px;padding:5px 6px 5px 14px;box-shadow:0 6px 0 rgba(58,44,32,.06);cursor:pointer;font-weight:800
+  }
+  .whoami .dot{width:14px;height:14px;border-radius:50%;background:var(--accent)}
+  .whoami .swap{background:var(--accent-soft);color:var(--accent-deep);border-radius:999px;padding:4px 10px;font-size:.8rem;font-weight:800}
+
+  .card{background:var(--card);border:2px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:26px}
+  .btn{
+    font-family:'Fredoka';font-size:1.05rem;border:none;cursor:pointer;border-radius:18px;padding:14px 22px;color:#fff;
+    background:var(--accent);box-shadow:0 6px 0 var(--accent-deep);transition:transform .08s, box-shadow .08s;
+  }
+  .btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--accent-deep)}
+  .btn.ghost{background:var(--card);color:var(--accent-deep);border:2px solid var(--accent);box-shadow:0 6px 0 rgba(58,44,32,.08)}
+  .btn.lg{font-size:1.2rem;padding:16px 30px}
+
+  /* ---- Profile picker ---- */
+  .hero{text-align:center;padding:30px 10px 6px}
+  .hero h1{font-size:2.5rem;line-height:1.05;margin-bottom:8px}
+  .hero p{color:var(--ink-soft);font-weight:700;font-size:1.05rem}
+  .pick{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  @media(max-width:540px){.pick{grid-template-columns:1fr}}
+  .who{
+    text-align:center;cursor:pointer;border:3px solid var(--line);border-radius:26px;background:var(--card);
+    padding:26px 18px;box-shadow:var(--shadow);transition:transform .12s, border-color .12s
+  }
+  .who:hover{transform:translateY(-4px)}
+  .who .ava{width:84px;height:84px;border-radius:24px;margin:0 auto 12px;display:grid;place-items:center;font-size:2.6rem}
+  .who .nm{font-family:'Fredoka';font-size:1.35rem}
+  .who .role{color:var(--ink-soft);font-weight:700;font-size:.9rem;margin-top:2px}
+  .who .stars{margin-top:10px;font-size:1rem}
+  .who.son .ava{background:var(--son-soft);border:2px solid var(--son)}
+  .who.wife .ava{background:var(--wife-soft);border:2px solid var(--wife)}
+
+  /* ---- Roadmap ---- */
+  .pagehead{display:flex;align-items:flex-end;justify-content:space-between;margin:6px 2px 18px}
+  .pagehead h2{font-size:1.7rem}
+  .pagehead .sub{color:var(--ink-soft);font-weight:700;font-size:.95rem}
+  .weekband{display:flex;align-items:center;gap:10px;margin:26px 2px 12px}
+  .weekband .pill{background:var(--accent);color:#fff;font-family:'Fredoka';border-radius:999px;padding:5px 16px;font-size:.95rem;box-shadow:0 4px 0 var(--accent-deep)}
+  .weekband .wt{font-family:'Fredoka';color:var(--ink-soft)}
+  .days{display:flex;flex-direction:column;gap:12px}
+  .day{
+    display:flex;align-items:center;gap:16px;background:var(--card);border:2px solid var(--line);
+    border-radius:22px;padding:16px 18px;box-shadow:0 6px 0 rgba(58,44,32,.06);cursor:pointer;transition:transform .1s
+  }
+  .day:hover{transform:translatex(4px)}
+  .day .num{
+    flex:none;width:54px;height:54px;border-radius:16px;background:var(--accent-soft);color:var(--accent-deep);
+    display:grid;place-items:center;font-family:'Fredoka';font-size:1.5rem
+  }
+  .day .body{flex:1;min-width:0}
+  .day .body .t{font-family:'Fredoka';font-size:1.12rem}
+  .day .body .meta{color:var(--ink-soft);font-weight:700;font-size:.85rem}
+  .day .end{flex:none;font-size:1.1rem}
+  .day.locked{opacity:.55;cursor:not-allowed;background:#faf6ef}
+  .day.locked .num{background:#eee5d6;color:#b6a690}
+  .day.done{border-color:var(--good)}
+  .day.done .num{background:var(--good-soft);color:var(--good)}
+  .build{
+    display:flex;align-items:center;gap:14px;border:2px dashed var(--accent);background:var(--accent-soft);
+    border-radius:22px;padding:16px 18px;margin-top:12px;cursor:pointer
+  }
+  .build .ic{font-size:1.8rem}
+  .build .t{font-family:'Fredoka';font-size:1.08rem;color:var(--accent-deep)}
+  .build .meta{font-weight:700;font-size:.85rem;color:var(--ink-soft)}
+  .future{opacity:.6;font-weight:700;color:var(--ink-soft);font-size:.92rem;padding:10px 4px}
+
+  .progresswrap{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .bar{flex:1;height:14px;border-radius:999px;background:#f0e6d6;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-deep));border-radius:999px;transition:width .5s}
+  .progresswrap .lbl{font-family:'Fredoka';color:var(--accent-deep);white-space:nowrap}
+
+  /* ---- Lesson / quiz ---- */
+  .back{background:none;border:none;cursor:pointer;font-family:'Fredoka';color:var(--accent-deep);font-size:1rem;padding:4px 0;margin-bottom:6px}
+  .lesson .badge{display:inline-block;background:var(--accent-soft);color:var(--accent-deep);font-family:'Fredoka';border-radius:999px;padding:4px 14px;font-size:.85rem;margin-bottom:10px}
+  .lesson h2{font-size:2rem;line-height:1.1;margin-bottom:6px}
+  .lesson .big-emoji{font-size:3.4rem;margin:4px 0 10px}
+  .concept{font-size:1.18rem;line-height:1.6;font-weight:700;color:var(--ink)}
+  .concept.kid{font-size:1.35rem;line-height:1.7}
+  .speak{margin-top:16px;display:inline-flex;align-items:center;gap:8px}
+  .qcount{color:var(--ink-soft);font-weight:800;font-size:.9rem;margin-bottom:6px}
+  .question{font-family:'Fredoka';font-size:1.55rem;line-height:1.25;margin:6px 0 18px}
+  .question.kid{font-size:1.8rem}
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{
+    display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:3px solid var(--line);
+    border-radius:18px;padding:16px 18px;cursor:pointer;font-weight:800;font-size:1.1rem;box-shadow:0 5px 0 rgba(58,44,32,.06);
+    transition:transform .08s,border-color .12s,background .12s
+  }
+  .opt:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .opt .oe{font-size:1.6rem}
+  .opt.kid{font-size:1.3rem;padding:18px}
+  .opt.correct{border-color:var(--good);background:var(--good-soft)}
+  .opt.wrong{border-color:var(--warn);background:#fff0f2}
+  .opt:disabled{cursor:default}
+  .explain{margin-top:16px;background:#f7f1e6;border-radius:14px;padding:14px 16px;font-weight:700;line-height:1.5}
+  .explain b{color:var(--accent-deep)}
+  .feed{font-family:'Fredoka';font-size:1.3rem;margin-top:14px}
+  .feed.ok{color:var(--good)}
+  .feed.no{color:var(--warn)}
+
+  /* ---- Result ---- */
+  .result{text-align:center;padding:14px 6px}
+  .result .big{font-size:4rem;margin-bottom:6px}
+  .result h2{font-size:2.1rem}
+  .result .score{font-family:'Fredoka';font-size:1.4rem;color:var(--accent-deep);margin:8px 0 2px}
+  .result .starline{font-size:2.2rem;margin:10px 0 18px;letter-spacing:6px}
+
+  .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+  canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+  .editname{font-size:.78rem;color:var(--ink-soft);text-decoration:underline;cursor:pointer;font-weight:700;margin-top:6px;display:inline-block}
+  .footnote{text-align:center;color:var(--ink-soft);font-weight:700;font-size:.8rem;margin-top:30px;line-height:1.6}
+
+  /* ---- Dashboard ---- */
+  .dash-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px}
+  @media(max-width:540px){.dash-cards{grid-template-columns:1fr}}
+  .dcard{border:2px solid var(--line);border-radius:22px;padding:18px;background:var(--card);box-shadow:0 6px 0 rgba(58,44,32,.06)}
+  .dcard .h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .dcard .h .a{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.6rem;flex:none}
+  .dcard .h .nm{font-family:'Fredoka';font-size:1.15rem;line-height:1.1}
+  .dcard .h .ro{color:var(--ink-soft);font-weight:700;font-size:.78rem}
+  .dcard.son .a{background:var(--son-soft);border:2px solid var(--son)}
+  .dcard.wife .a{background:var(--wife-soft);border:2px solid var(--wife)}
+  .dstat{display:flex;justify-content:space-between;font-weight:800;padding:6px 0;border-top:1px dashed var(--line);font-size:.92rem}
+  .dstat span:last-child{font-family:'Fredoka'}
+  .section-t{font-family:'Fredoka';font-size:1.3rem;margin:24px 2px 12px}
+  .wrow{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:10px}
+  .wrow .wn{flex:none;font-family:'Fredoka';background:#f0e6d6;border-radius:10px;padding:4px 10px;font-size:.85rem;color:var(--ink-soft)}
+  .wrow .wtt{flex:1;font-weight:800;font-size:.9rem;min-width:0}
+  .wrow .wstat{flex:none;font-weight:800;font-size:.82rem;text-align:right;line-height:1.5}
+  .wrow .wstat .s{color:var(--son-deep)}
+  .wrow .wstat .w{color:var(--wife-deep)}
+  .feeditem{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px dashed var(--line);font-weight:700;font-size:.92rem}
+  .feeditem .when{margin-left:auto;color:var(--ink-soft);font-size:.8rem;white-space:nowrap}
+  .together{background:var(--accent-soft);border:2px dashed var(--accent);border-radius:18px;padding:14px 16px;margin:18px 0;font-weight:700;color:var(--accent-deep);line-height:1.5}
+  .dashbtn{display:block;width:100%;text-align:center;background:#5a6b7b;box-shadow:0 6px 0 #3f4d59}
+  .maplink{background:none;border:none;cursor:pointer;color:var(--accent-deep);font-family:'Fredoka';font-size:.95rem;white-space:nowrap}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap" id="app"></div>
+
+<script>
+/* ============================================================
+   FAMILY CODE QUEST
+   A day-by-day coding curriculum + quiz for your family.
+
+   >>> HOW TO ADD MORE DAYS <<<
+   Scroll to the CURRICULUM array below. Copy any day object,
+   change the numbers/text, and it appears automatically.
+   Each day has TWO tracks: "kid" (your son) and "grownup" (your wife).
+   Build tasks live in the WEEKS array.
+   ============================================================ */
+
+/* ---------- Storage: works in Claude, when self-hosted, or offline ---------- */
+const Store = {
+  mem:{},
+  async get(k){
+    try{ if(window.storage&&window.storage.get){ const r=await window.storage.get(k); return r?r.value:null; } }catch(e){}
+    try{ const v=localStorage.getItem(k); if(v!==null) return v; }catch(e){}
+    return (k in this.mem)?this.mem[k]:null;
+  },
+  async set(k,v){
+    try{ if(window.storage&&window.storage.set){ await window.storage.set(k,v,false); return; } }catch(e){}
+    try{ localStorage.setItem(k,v); return; }catch(e){}
+    this.mem[k]=v;
+  }
+};
+
+/* ---------- Profiles ---------- */
+const PROFILES = {
+  son:  { key:'son',  defName:'Raviraj', role:'The Explorer', ava:'🦊', track:'kid',
+          accent:'--son', deep:'--son-deep', soft:'--son-soft', tool:'ScratchJr' },
+  wife: { key:'wife', defName:'Anusha', role:'The Builder',  ava:'🦋', track:'grownup',
+          accent:'--wife', deep:'--wife-deep', soft:'--wife-soft', tool:'Scratch' }
+};
+
+/* ---------- Weeks (titles + build tasks) ---------- */
+const WEEKS = {
+  1:{ title:'Telling the Computer What to Do',
+      build:{ icon:'🛠️',
+        kid:'Make your cat walk across the screen and say "Hi!". Ask a grown-up to help, then ask the AI helper: "How do I make my Scratch cat move and talk?"',
+        grownup:'Make the cat walk across the screen and say hello. Then ask your AI helper (Claude / ChatGPT): "In Scratch, how do I make my cat move and then say hi?" — try what it suggests.' } },
+  2:{ title:'Repeating & Reacting',
+      build:{ icon:'🛠️',
+        kid:'Make your cat bounce around the screen forever! Then ask the AI helper to make it change colour while it bounces. 🌈',
+        grownup:'Make a sprite bounce around forever. Then ask your AI helper: "How can I make my Scratch cat change colour while it bounces?" and add it. Show each other what you built!' } }
+};
+
+/* ---------- The Curriculum ---------- */
+const CURRICULUM = [
+  { day:1, week:1, title:'What is a Program?', emoji:'📜',
+    concept:{
+      kid:'A program is a list of steps. The computer does each step one at a time — just like following a recipe to bake cookies! 🍪',
+      grownup:'A program is simply a set of instructions a computer follows, in order, from top to bottom — like a recipe or a to-do list. The computer is fast, but not clever: it only does exactly what the steps say.' },
+    quiz:{
+      kid:[
+        {q:'A program is most like a...', o:[{e:'🍪',t:'Recipe'},{e:'😴',t:'Nap'},{e:'🎈',t:'Balloon'}], a:0},
+        {q:'How does the computer do the steps?', o:[{e:'1️⃣',t:'One at a time'},{e:'🌀',t:'All jumbled up'}], a:0},
+        {q:'Who follows the steps?', o:[{e:'💻',t:'The computer'},{e:'🐶',t:'The dog'}], a:0}
+      ],
+      grownup:[
+        {q:'A program is best described as...', o:[{t:'A list of instructions in order'},{t:'A kind of computer'},{t:'A password'}], a:0, ex:'It is just ordered instructions the machine follows.'},
+        {q:'A computer follows your instructions...', o:[{t:'Exactly as written'},{t:'By guessing what you meant'},{t:'Randomly'}], a:0, ex:'Computers do what you SAY, not what you mean.'},
+        {q:'Programs usually run...', o:[{t:'Top to bottom'},{t:'Bottom to top'},{t:'Middle outward'}], a:0},
+        {q:'Why is a recipe a good comparison?', o:[{t:'It is a sequence of steps'},{t:'It is tasty'},{t:'It has pictures'}], a:0}
+      ]
+    }},
+
+  { day:2, week:1, title:'Exact Instructions', emoji:'🤖',
+    concept:{
+      kid:'Computers are a bit silly! 🤖 They do EXACTLY what you tell them. If you say "put on shoes" before "put on socks", you get shoes with no socks! So we tell them very carefully.',
+      grownup:'The number one surprise for new coders: the computer does exactly what you say, not what you meant. A tiny slip in your instructions gives a funny (or broken) result. Being precise is the whole game.' },
+    quiz:{
+      kid:[
+        {q:'You tell a robot "spread the jam" before "open the jar". What happens?', o:[{e:'🫙',t:'It can\'t — jar is shut!'},{e:'🥪',t:'Yummy sandwich'}], a:0},
+        {q:'Computers do what you...', o:[{e:'🎯',t:'Say, exactly'},{e:'🌟',t:'Wish for'}], a:0},
+        {q:'Are computers clever like people?', o:[{e:'🤖',t:'No — they need exact steps'},{e:'🧠',t:'Yes, super smart'}], a:0}
+      ],
+      grownup:[
+        {q:'Your program does something weird. Most likely cause?', o:[{t:'Your instructions were not precise'},{t:'The computer is broken'},{t:'Bad luck'}], a:0, ex:'Almost always it is the instructions, not the machine.'},
+        {q:'"Do what I mean, not what I say" — does a computer do this?', o:[{t:'No'},{t:'Yes'}], a:0},
+        {q:'Why write instructions carefully?', o:[{t:'The computer follows them literally'},{t:'To look neat'},{t:'It is optional'}], a:0},
+        {q:'Best mindset for coding?', o:[{t:'Be precise and exact'},{t:'Be vague'},{t:'Just hope it works'}], a:0}
+      ]
+    }},
+
+  { day:3, week:1, title:'Order Matters', emoji:'🔢',
+    concept:{
+      kid:'The ORDER of your steps matters! 🔢 You put on socks 🧦 and THEN shoes 👟 — not the other way round. Mixing up the order makes silly things happen.',
+      grownup:'Sequence means the order your steps run in. The same steps in a different order can give a totally different result. "Boil water, add pasta" is not the same as "add pasta, boil water". Order is part of the logic.' },
+    quiz:{
+      kid:[
+        {q:'What goes on first?', o:[{e:'🧦',t:'Socks, then shoes'},{e:'👟',t:'Shoes, then socks'}], a:0},
+        {q:'Making toast — what is the first step?', o:[{e:'🍞',t:'Put bread in'},{e:'😋',t:'Eat it'}], a:0},
+        {q:'Does the order of steps matter?', o:[{e:'🔢',t:'Yes it does!'},{e:'🤷',t:'Nope'}], a:0}
+      ],
+      grownup:[
+        {q:'Steps A,B,C give one result. C,B,A might give...', o:[{t:'A different result'},{t:'The same result, always'},{t:'An error, always'}], a:0},
+        {q:'"Pour cereal, add milk" vs "add milk, pour cereal" — order...', o:[{t:'Changes the outcome'},{t:'Never matters'}], a:0},
+        {q:'"Sequence" means...', o:[{t:'The order steps run in'},{t:'How fast they run'},{t:'How many there are'}], a:0},
+        {q:'First rule of step order?', o:[{t:'Put the steps in the right order'},{t:'Order is random'}], a:0}
+      ]
+    }},
+
+  { day:4, week:1, title:'Meet Scratch: Sprites & the Green Flag', emoji:'🐱',
+    concept:{
+      kid:'In Scratch, the cat 🐱 is called a SPRITE — your little character. When you press the green flag 🏁, your program starts. Green flag means GO!',
+      grownup:'Time to open Scratch (your son uses ScratchJr). The cat is a "sprite" — a character you control. Code starts when you click the green flag 🏁. You drag blocks together instead of typing, which is perfect for learning the ideas without worrying about syntax.' },
+    quiz:{
+      kid:[
+        {q:'The cat in Scratch is called a...', o:[{e:'🐱',t:'Sprite'},{e:'🐶',t:'Doggo'}], a:0},
+        {q:'Which button STARTS your program?', o:[{e:'🏁',t:'Green flag'},{e:'🛑',t:'Red stop'}], a:0},
+        {q:'Green flag means...', o:[{e:'▶️',t:'GO!'},{e:'✋',t:'STOP'}], a:0}
+      ],
+      grownup:[
+        {q:'A "sprite" is...', o:[{t:'A character / object you control'},{t:'A drink'},{t:'An error message'}], a:0},
+        {q:'The green flag...', o:[{t:'Starts the program'},{t:'Deletes it'},{t:'Saves it'}], a:0},
+        {q:'In Scratch you build code by...', o:[{t:'Dragging blocks together'},{t:'Typing C++'},{t:'Drawing'}], a:0},
+        {q:'ScratchJr compared to Scratch...', o:[{t:'Is the simpler version for young kids'},{t:'Is exactly the same'},{t:'Is harder'}], a:0}
+      ]
+    }},
+
+  { day:5, week:1, title:'Make It Move! (+ Week Review)', emoji:'👟',
+    concept:{
+      kid:'Motion blocks make the cat MOVE! ➡️ "Move 10 steps" slides it along, and "turn" spins it. Try it: green flag 🏁 → move → watch your cat go!',
+      grownup:'Motion blocks (move, turn, go to) change where a sprite is. Snap a "when green flag clicked" block on top, then "move 10 steps" under it — you just wrote a 2-line program! Quick review: a program is ordered steps, the computer is literal, and order matters.' },
+    quiz:{
+      kid:[
+        {q:'Which block makes the cat move?', o:[{e:'➡️',t:'Move block'},{e:'🔊',t:'Sound block'}], a:0},
+        {q:'A program is a list of...', o:[{e:'📋',t:'Steps'},{e:'🍬',t:'Snacks'}], a:0},
+        {q:'What starts your program?', o:[{e:'🏁',t:'Green flag'},{e:'🌙',t:'Nothing'}], a:0}
+      ],
+      grownup:[
+        {q:'"move 10 steps" does what?', o:[{t:'Moves the sprite'},{t:'Plays a sound'},{t:'Ends the program'}], a:0},
+        {q:'To start on the green flag you use...', o:[{t:'A "when green flag clicked" block'},{t:'A move block'},{t:'Nothing'}], a:0},
+        {q:'Review — computers follow instructions...', o:[{t:'Exactly'},{t:'Loosely'}], a:0},
+        {q:'Review — the order of steps...', o:[{t:'Matters'},{t:'Never matters'}], a:0},
+        {q:'You snapped two blocks together. You made a...', o:[{t:'Tiny program!'},{t:'Mistake'},{t:'Website'}], a:0}
+      ]
+    }},
+
+  { day:6, week:2, title:'Events: When This, Do That', emoji:'👆',
+    concept:{
+      kid:'An EVENT is when something happens! 👆 "When I click the cat → it meows 🔊". When ___ happens, do ___ !',
+      grownup:'Events make programs interactive. "When green flag clicked", "when this sprite clicked", "when space key pressed" are all triggers. The pattern is: WHEN something happens → DO these steps.' },
+    quiz:{
+      kid:[
+        {q:'"When I click → cat meows". Clicking is the...', o:[{e:'👆',t:'Event'},{e:'🍬',t:'Snack'}], a:0},
+        {q:'An event is like...', o:[{e:'⚡',t:'When something happens'},{e:'😴',t:'Going to sleep'}], a:0},
+        {q:'When the flag is clicked, the program...', o:[{e:'🏁',t:'Starts'},{e:'🙈',t:'Hides'}], a:0}
+      ],
+      grownup:[
+        {q:'An event is...', o:[{t:'A trigger that starts some code'},{t:'A bug'},{t:'A sprite'}], a:0},
+        {q:'"When space key pressed" is an example of...', o:[{t:'An event block'},{t:'A loop'},{t:'A variable'}], a:0},
+        {q:'The shape of an event is...', o:[{t:'WHEN x happens, DO y'},{t:'Always run y'},{t:'Never run anything'}], a:0},
+        {q:'Why use events?', o:[{t:'So the program reacts to the user'},{t:'To slow it down'}], a:0}
+      ]
+    }},
+
+  { day:7, week:2, title:'Loops: Repeat!', emoji:'🔁',
+    concept:{
+      kid:'A LOOP repeats steps so you don\'t have to write them again and again! 🔁 "Repeat 4 times: move + turn" draws a square! ⬛',
+      grownup:'A loop repeats a block of steps. Instead of dragging "move" ten times, use "repeat 10 → move". Loops keep your code short, and they are how computers do boring, repeated work for us.' },
+    quiz:{
+      kid:[
+        {q:'A loop helps you...', o:[{e:'🔁',t:'Repeat steps'},{e:'😴',t:'Take a nap'}], a:0},
+        {q:'"Repeat 4" means do it...', o:[{e:'4️⃣',t:'4 times'},{e:'1️⃣',t:'1 time'}], a:0},
+        {q:'Loops save us from...', o:[{e:'😅',t:'Writing the same thing lots'},{e:'🎉',t:'Having fun'}], a:0}
+      ],
+      grownup:[
+        {q:'A loop is used for...', o:[{t:'Repeating steps'},{t:'Deleting steps'},{t:'One-time steps'}], a:0},
+        {q:'"repeat 10 [move]" moves the sprite...', o:[{t:'10 times'},{t:'Once'},{t:'Forever'}], a:0},
+        {q:'Loops are useful because...', o:[{t:'Computers handle repetition well'},{t:'They are slow'}], a:0},
+        {q:'Without a loop, repeating 50 times means...', o:[{t:'Dragging 50 blocks'},{t:'It is impossible'}], a:0}
+      ]
+    }},
+
+  { day:8, week:2, title:'Forever Loops', emoji:'♾️',
+    concept:{
+      kid:'A FOREVER loop never stops! ♾️ "Forever: move" makes the cat go and go and go! It\'s great for things that should keep happening.',
+      grownup:'A "forever" loop runs until you stop the program — perfect for things that should always keep moving or checking, like a game character or an animation. Use it when there is no fixed number of repeats.' },
+    quiz:{
+      kid:[
+        {q:'A forever loop stops...', o:[{e:'♾️',t:'Never!'},{e:'⏱️',t:'Right away'}], a:0},
+        {q:'Forever is good for things that...', o:[{e:'🔄',t:'Keep going'},{e:'1️⃣',t:'Happen once'}], a:0},
+        {q:'To stop a forever loop you press...', o:[{e:'🛑',t:'The red stop'},{e:'🌙',t:'Nothing'}], a:0}
+      ],
+      grownup:[
+        {q:'"forever" repeats...', o:[{t:'Until you stop the program'},{t:'Exactly 10 times'},{t:'Once'}], a:0},
+        {q:'A good use of forever is...', o:[{t:'A game loop that always runs'},{t:'Adding 2 + 2 once'}], a:0},
+        {q:'Repeat vs forever...', o:[{t:'Repeat has a number, forever does not'},{t:'They are identical'}], a:0},
+        {q:'To end a forever loop you...', o:[{t:'Stop the program'},{t:'Wait — it ends itself'}], a:0}
+      ]
+    }},
+
+  { day:9, week:2, title:'Putting It Together: Motion + Loops', emoji:'🎬',
+    concept:{
+      kid:'Mix them together! 🎬 "Forever: move 10, if on edge bounce" makes the cat bounce around like a ball! ⚽ Blocks work as a team.',
+      grownup:'Real programs combine ideas: an event to start, a loop to repeat, and motion to act. "When flag clicked → forever → move 10 → if on edge, bounce" gives you a bouncing sprite. You are now combining three concepts into one behaviour.' },
+    quiz:{
+      kid:[
+        {q:'To make the cat bounce around, you use move AND a...', o:[{e:'🔁',t:'Loop'},{e:'🍬',t:'Snack'}], a:0},
+        {q:'Blocks work best when they...', o:[{e:'🤝',t:'Work together'},{e:'🥊',t:'Fight'}], a:0},
+        {q:'"If on edge, bounce" stops the cat from...', o:[{e:'📺',t:'Going off the screen'},{e:'🔊',t:'Meowing'}], a:0}
+      ],
+      grownup:[
+        {q:'A bouncing sprite combines...', o:[{t:'Event + loop + motion'},{t:'Only motion'},{t:'Only sound'}], a:0},
+        {q:'"if on edge, bounce" does what?', o:[{t:'Turns the sprite back at the edge'},{t:'Ends the game'}], a:0},
+        {q:'Combining concepts lets you...', o:[{t:'Build real behaviours'},{t:'Break Scratch'}], a:0},
+        {q:'The order to build a bounce is...', o:[{t:'flag → forever → move → bounce'},{t:'Any random order works the same'}], a:0}
+      ]
+    }},
+
+  { day:10, week:2, title:'Big Review & Trophy Quiz', emoji:'🏆',
+    concept:{
+      kid:'You learned SO much! 🏆 Programs, sprites, the green flag, loops and forever. Let\'s do one happy review quiz and grab your trophy! 🎉',
+      grownup:'Two weeks down! You now understand sequence, precise instructions, sprites, events, and loops. This review pulls it all together — then you are ready for the bigger ideas in Week 3 (decisions and choices).' },
+    quiz:{
+      kid:[
+        {q:'What repeats steps for you?', o:[{e:'🔁',t:'A loop'},{e:'🍬',t:'A snack'}], a:0},
+        {q:'What starts your program?', o:[{e:'🏁',t:'Green flag'},{e:'🛑',t:'Red stop'}], a:0},
+        {q:'The cat character is a...', o:[{e:'🐱',t:'Sprite'},{e:'🐟',t:'Fish'}], a:0},
+        {q:'Does the order of steps matter?', o:[{e:'🔢',t:'Yes!'},{e:'🤷',t:'Never'}], a:0}
+      ],
+      grownup:[
+        {q:'A loop is for...', o:[{t:'Repeating steps'},{t:'Starting the program'}], a:0},
+        {q:'An event is...', o:[{t:'A trigger'},{t:'A repeat'}], a:0},
+        {q:'A forever loop runs...', o:[{t:'Until you stop it'},{t:'Exactly 3 times'}], a:0},
+        {q:'A sprite is...', o:[{t:'A character you control'},{t:'A loop'}], a:0},
+        {q:'Programs run...', o:[{t:'In order, top to bottom'},{t:'Randomly'}], a:0}
+      ]
+    }}
+];
+
+/* Topics coming after Week 2 — shown on the roadmap, easy to build out later */
+const FUTURE = [
+  'Week 3 — Decisions: if / then (making choices)',
+  'Week 4 — Comparing & sensing (is it touching? is it bigger?)',
+  'Week 5 — Variables: the computer\u2019s memory (keep a score!)',
+  'Week 6 — Decomposition: break a big idea into small steps',
+  'Week 7 — Make a simple game (catch the falling apple 🍎)',
+  'Week 8 — How real apps work: screen, brain & memory',
+  'Week 9 — Building WITH AI: describe → get code → try → fix',
+  'Week 10 — Family project: design & build something together 🎉'
+];
+
+/* =================== App logic =================== */
+const app = document.getElementById('app');
+let current = null;       // current profile object
+let progress = {};        // {completed:{day:stars}, builds:{week:true}}
+let names = {son:PROFILES.son.defName, wife:PROFILES.wife.defName};
+
+const maxDay = Math.max(...CURRICULUM.map(d=>d.day));
+
+async function boot(){
+  const n = await Store.get('fcq:names');
+  if(n){ try{ names = JSON.parse(n); }catch(e){} }
+  renderPicker();
+}
+
+function setAccent(p){
+  const r=document.documentElement.style;
+  r.setProperty('--accent', `var(${p.accent})`);
+  r.setProperty('--accent-deep', `var(${p.deep})`);
+  r.setProperty('--accent-soft', `var(${p.soft})`);
+}
+
+async function chooseProfile(key){
+  current = PROFILES[key];
+  setAccent(current);
+  const raw = await Store.get('fcq:progress:'+key);
+  progress = raw ? JSON.parse(raw) : {completed:{}, builds:{}};
+  if(!progress.completed) progress.completed={};
+  if(!progress.builds) progress.builds={};
+  if(!progress.dates) progress.dates={};
+  renderRoadmap();
+}
+
+async function saveProgress(){
+  await Store.set('fcq:progress:'+current.key, JSON.stringify(progress));
+}
+
+function starsFor(score,total){
+  const pct=score/total;
+  if(pct>=0.99) return 3;
+  if(pct>=0.66) return 2;
+  return 1;
+}
+function isDone(day){ return day in progress.completed; }
+function isUnlocked(day){ return day===1 || isDone(day-1); }
+
+/* ---------- Attribute-safe string for inline onclick (handles ' and ") ---------- */
+function sattr(s){ return JSON.stringify(s).replace(/&/g,'&amp;').replace(/'/g,'&#39;'); }
+
+/* ---------- Read aloud ---------- */
+function speak(text){
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text.replace(/[^\p{L}\p{N}\s.,!?'"-]/gu,' '));
+    u.rate=0.95; u.pitch=1.05;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* =================== Screens =================== */
+function renderPicker(){
+  const sStars = '⭐'; // decorative
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="brand"><span class="logo">🚀</span> Family Code Quest</div>
+    </div>
+    <div class="hero">
+      <h1>Who\u2019s coding today?</h1>
+      <p>Learn to think like a builder \u2014 a little bit every day.</p>
+    </div>
+    <div class="pick">
+      <div class="who son" onclick="chooseProfile('son')">
+        <div class="ava">${PROFILES.son.ava}</div>
+        <div class="nm" id="nm-son">${names.son}</div>
+        <div class="role">${PROFILES.son.role} \u00b7 ${PROFILES.son.tool}</div>
+        <div class="editname" onclick="event.stopPropagation();renameProfile('son')">rename</div>
+      </div>
+      <div class="who wife" onclick="chooseProfile('wife')">
+        <div class="ava">${PROFILES.wife.ava}</div>
+        <div class="nm" id="nm-wife">${names.wife}</div>
+        <div class="role">${PROFILES.wife.role} \u00b7 ${PROFILES.wife.tool}</div>
+        <div class="editname" onclick="event.stopPropagation();renameProfile('wife')">rename</div>
+      </div>
+    </div>
+    <button class="btn dashbtn" onclick="renderDashboard()" style="max-width:430px;margin:22px auto 0">\ud83d\udc40 Family Dashboard \u2014 progress & weekly review</button>
+    <div class="footnote">
+      ${maxDay} lessons ready \u00b7 a new concept + quiz each day \u00b7 a build-with-AI mission each week<br>
+      Tip: your son can tap the 🔊 buttons to hear everything read aloud.
+    </div>`;
+}
+
+async function renameProfile(key){
+  const v = prompt('Name for this learner:', names[key]);
+  if(v && v.trim()){
+    names[key]=v.trim();
+    await Store.set('fcq:names', JSON.stringify(names));
+    renderPicker();
+  }
+}
+
+function renderRoadmap(){
+  const done = Object.keys(progress.completed).length;
+  const pct = Math.round(done/maxDay*100);
+  let weeksHtml = '';
+  const weekNums = [...new Set(CURRICULUM.map(d=>d.week))].sort((a,b)=>a-b);
+
+  weekNums.forEach(wn=>{
+    const w = WEEKS[wn] || {title:''};
+    weeksHtml += `<div class="weekband"><span class="pill">Week ${wn}</span><span class="wt">${w.title}</span></div><div class="days">`;
+    CURRICULUM.filter(d=>d.week===wn).forEach(d=>{
+      const unlocked=isUnlocked(d.day), done=isDone(d.day);
+      const cls = done?'done':(unlocked?'':'locked');
+      const stars = done ? '⭐'.repeat(progress.completed[d.day]) : '';
+      const end = done? stars : (unlocked? '▶️' : '🔒');
+      weeksHtml += `
+        <div class="day ${cls}" ${unlocked?`onclick="openDay(${d.day})"`:''}>
+          <div class="num">${done?'✓':d.day}</div>
+          <div class="body">
+            <div class="t">${d.emoji} ${d.title}</div>
+            <div class="meta">Day ${d.day}${done?' \u00b7 complete':(unlocked?' \u00b7 tap to start':' \u00b7 finish the day before')}</div>
+          </div>
+          <div class="end">${end}</div>
+        </div>`;
+    });
+    // build task at end of week (unlocks once all week days done)
+    if(w.build){
+      const weekDays = CURRICULUM.filter(d=>d.week===wn).map(d=>d.day);
+      const weekDone = weekDays.every(isDone);
+      const bDone = progress.builds[wn];
+      weeksHtml += `
+        <div class="build" style="${weekDone?'':'opacity:.5'}" ${weekDone?`onclick="toggleBuild(${wn})"`:''}>
+          <div class="ic">${bDone?'✅':w.build.icon}</div>
+          <div style="flex:1">
+            <div class="t">Weekly Build Mission</div>
+            <div class="meta">${weekDone?(bDone?'Done! Tap to un-tick':'Tap when you\u2019ve built it'):'Unlocks after the week\u2019s lessons'}</div>
+          </div>
+        </div>`;
+    }
+    weeksHtml += `</div>`;
+  });
+
+  let futureHtml = '<div style="margin-top:26px">';
+  FUTURE.forEach(f=> futureHtml += `<div class="future">🌱 ${f}</div>`);
+  futureHtml += `<div class="future" style="opacity:.5">More lessons can be added any time \u2014 see the notes inside the file.</div></div>`;
+
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="brand"><span class="logo">🚀</span> Code Quest</div>
+      <div class="whoami" onclick="renderPicker()">
+        <span class="dot"></span>${current.ava} ${names[current.key]}<span class="swap">switch</span>
+      </div>
+    </div>
+    <div class="progresswrap">
+      <div class="lbl">${done}/${maxDay}</div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="lbl">${pct}%</div>
+    </div>
+    <div class="pagehead"><div><h2>Your Quest Map</h2><div class="sub">One step a day. No rush \u2014 it\u2019s okay to get things wrong.</div></div><button class="maplink" onclick="renderDashboard()">\ud83d\udcca Dashboard</button></div>
+    ${weeksHtml}
+    ${futureHtml}
+    <div class="footnote">Using <b>${current.tool}</b> for this learner.</div>`;
+}
+
+async function toggleBuild(wn){
+  progress.builds[wn] = progress.builds[wn] ? false : new Date().toISOString();
+  progress.lastActive = new Date().toISOString();
+  await saveProgress();
+  renderRoadmap();
+}
+
+/* =================== Family Dashboard (parents) =================== */
+async function loadProfileProgress(key){
+  const raw = await Store.get('fcq:progress:'+key);
+  let p = raw ? JSON.parse(raw) : {};
+  p.completed=p.completed||{}; p.builds=p.builds||{}; p.dates=p.dates||{};
+  return p;
+}
+function startOfDay(d){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime(); }
+function timeAgo(iso){
+  if(!iso) return 'Not started';
+  const d=new Date(iso), now=new Date();
+  const days=Math.round((startOfDay(now)-startOfDay(d))/86400000);
+  if(days<=0) return 'Today';
+  if(days===1) return 'Yesterday';
+  if(days<7) return days+' days ago';
+  return d.toLocaleDateString();
+}
+
+async function renderDashboard(){
+  const data = { son: await loadProfileProgress('son'), wife: await loadProfileProgress('wife') };
+  const r=document.documentElement.style;
+  r.setProperty('--accent','#5a6b7b'); r.setProperty('--accent-deep','#3f4d59'); r.setProperty('--accent-soft','#eef2f5');
+
+  const sumCard=(key)=>{
+    const p=data[key], pr=PROFILES[key];
+    const doneCount=Object.keys(p.completed).length;
+    const stars=Object.values(p.completed).reduce((a,b)=>a+(+b||0),0);
+    const curDay=doneCount<maxDay?doneCount+1:maxDay;
+    const builds=Object.values(p.builds).filter(Boolean).length;
+    return `<div class="dcard ${key}">
+      <div class="h"><div class="a">${pr.ava}</div><div><div class="nm">${names[key]}</div><div class="ro">${pr.role} \u00b7 ${pr.tool}</div></div></div>
+      <div class="dstat"><span>Lessons done</span><span>${doneCount} / ${maxDay}</span></div>
+      <div class="dstat"><span>Stars earned</span><span>\u2b50 ${stars} / ${maxDay*3}</span></div>
+      <div class="dstat"><span>Build missions</span><span>\ud83d\udee0\ufe0f ${builds}</span></div>
+      <div class="dstat"><span>Currently on</span><span>Day ${curDay}</span></div>
+      <div class="dstat"><span>Last active</span><span>${timeAgo(p.lastActive)}</span></div>
+    </div>`;
+  };
+
+  const weekNums=[...new Set(CURRICULUM.map(d=>d.week))].sort((a,b)=>a-b);
+  let weekly='';
+  weekNums.forEach(wn=>{
+    const w=WEEKS[wn]||{title:''};
+    const wd=CURRICULUM.filter(d=>d.week===wn).map(d=>d.day);
+    const stat=(key)=>{
+      const p=data[key];
+      const c=wd.filter(d=>d in p.completed).length;
+      const st=wd.reduce((a,d)=>a+(p.completed[d]||0),0);
+      const b=p.builds[wn]?' \ud83d\udee0\ufe0f\u2713':'';
+      return `${c}/${wd.length} \u2b50${st}${b}`;
+    };
+    weekly+=`<div class="wrow"><span class="wn">W${wn}</span><span class="wtt">${w.title}</span>
+      <span class="wstat"><span class="s">${PROFILES.son.ava} ${stat('son')}</span><br><span class="w">${PROFILES.wife.ava} ${stat('wife')}</span></span></div>`;
+  });
+
+  let acts=[];
+  ['son','wife'].forEach(key=>{
+    const p=data[key];
+    Object.keys(p.completed).forEach(day=>acts.push({key,day:+day,stars:p.completed[day],date:p.dates[day]}));
+  });
+  acts=acts.filter(a=>a.date).sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,7);
+  const feed = acts.length ? acts.map(a=>{
+    const d=CURRICULUM.find(x=>x.day===a.day);
+    return `<div class="feeditem">${PROFILES[a.key].ava}<span>${names[a.key]} finished <b>Day ${a.day}</b> \u00b7 ${d?d.title:''} ${'\u2b50'.repeat(a.stars)}</span><span class="when">${timeAgo(a.date)}</span></div>`;
+  }).join('') : `<div class="feeditem" style="color:var(--ink-soft);border:none">No lessons finished yet \u2014 daily activity will show up here.</div>`;
+
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="brand"><span class="logo" style="background:linear-gradient(140deg,#9fb3c2,#5a6b7b);transform:rotate(-4deg)">\ud83d\udcca</span> Family Dashboard</div>
+      <button class="maplink" onclick="renderPicker()">\u2190 Home</button>
+    </div>
+    <p style="color:var(--ink-soft);font-weight:700;margin:0 2px 16px">For parents \u2014 watch daily progress and review each week.</p>
+    <div class="dash-cards">${sumCard('son')}${sumCard('wife')}</div>
+    <div class="together">\ud83d\udc69\u200d\ud83d\udc66 Learning together? On the Home screen, ${names.wife} can do her own lesson \u2014 then sit with ${names.son} and tap his profile to do his day side by side.</div>
+    <div class="section-t">\ud83d\uddd3\ufe0f Weekly Review</div>
+    ${weekly}
+    <div class="section-t">\u23f1\ufe0f Recent Activity</div>
+    <div>${feed}</div>
+    <button class="btn dashbtn" onclick="renderPicker()" style="margin-top:18px">\u2190 Back to Home</button>`;
+}
+
+/* ---------- Lesson (concept) ---------- */
+function openDay(day){
+  const d = CURRICULUM.find(x=>x.day===day);
+  const kid = current.track==='kid';
+  const text = d.concept[current.track];
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="brand" style="font-size:1.1rem"><span class="logo" style="width:34px;height:34px;font-size:1.1rem">🚀</span> Day ${d.day}</div>
+      <div class="whoami" onclick="renderRoadmap()"><span class="dot"></span>${current.ava} ${names[current.key]}<span class="swap">map</span></div>
+    </div>
+    <div class="card lesson">
+      <button class="back" onclick="renderRoadmap()">\u2190 Back to the map</button>
+      <div class="badge">Week ${d.week} \u00b7 Day ${d.day}</div>
+      <div class="big-emoji">${d.emoji}</div>
+      <h2>${d.title}</h2>
+      <p class="concept ${kid?'kid':''}">${text}</p>
+      <div class="speak">
+        <button class="btn ghost" onclick='speak(${sattr(text)})'>🔊 Read it to me</button>
+      </div>
+      <div style="margin-top:24px">
+        <button class="btn lg" onclick="startQuiz(${d.day})">Start the quiz ${kid?'🎮':'\u2192'}</button>
+      </div>
+    </div>`;
+}
+
+/* ---------- Quiz ---------- */
+let quizState = null;
+function startQuiz(day){
+  const d = CURRICULUM.find(x=>x.day===day);
+  const questions = d.quiz[current.track];
+  quizState = { day, questions, i:0, score:0, answered:false };
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const kid = current.track==='kid';
+  const {questions, i} = quizState;
+  const q = questions[i];
+  const optsHtml = q.o.map((o,idx)=>`
+    <button class="opt ${kid?'kid':''}" id="opt-${idx}" onclick="answer(${idx})">
+      ${o.e?`<span class="oe">${o.e}</span>`:''}<span>${o.t}</span>
+    </button>`).join('');
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="brand" style="font-size:1.1rem"><span class="logo" style="width:34px;height:34px;font-size:1.1rem">🚀</span> Quiz</div>
+      <div class="whoami" onclick="renderRoadmap()"><span class="dot"></span>${current.ava} ${names[current.key]}<span class="swap">exit</span></div>
+    </div>
+    <div class="card">
+      <div class="qcount">Question ${i+1} of ${questions.length}</div>
+      <div class="question ${kid?'kid':''}">${q.q}
+        ${kid?`<button class="btn ghost" style="font-size:.85rem;padding:8px 12px;vertical-align:middle;margin-left:6px" onclick='speak(${sattr(q.q+'. '+q.o.map(x=>x.t).join(", or, "))})'>🔊</button>`:''}
+      </div>
+      <div class="opts">${optsHtml}</div>
+      <div id="feedarea"></div>
+    </div>`;
+}
+
+function answer(idx){
+  if(quizState.answered) return;
+  quizState.answered = true;
+  const kid = current.track==='kid';
+  const q = quizState.questions[quizState.i];
+  const correct = q.a;
+  const btns = document.querySelectorAll('.opt');
+  btns.forEach(b=>b.disabled=true);
+  document.getElementById('opt-'+correct).classList.add('correct');
+
+  const feed = document.getElementById('feedarea');
+  if(idx===correct){
+    quizState.score++;
+    feed.innerHTML = `<div class="feed ok">${kid?'🎉 Yay! That\u2019s right!':'✅ Correct!'}</div>`;
+    miniBurst();
+  }else{
+    document.getElementById('opt-'+idx).classList.add('wrong');
+    feed.innerHTML = `<div class="feed no">${kid?'Oops! The green one is right \u2014 good try! 💛':'Not quite \u2014 the highlighted one is correct.'}</div>`;
+  }
+  if(q.ex && !kid){
+    feed.innerHTML += `<div class="explain"><b>Why:</b> ${q.ex}</div>`;
+  }
+  const last = quizState.i === quizState.questions.length-1;
+  feed.innerHTML += `<div style="margin-top:18px"><button class="btn lg" onclick="nextQ()">${last?'See my result 🏆':'Next \u2192'}</button></div>`;
+}
+
+function nextQ(){
+  if(quizState.i < quizState.questions.length-1){
+    quizState.i++; quizState.answered=false;
+    renderQuestion();
+  }else{
+    finishQuiz();
+  }
+}
+
+async function finishQuiz(){
+  const {day, score, questions} = quizState;
+  const total = questions.length;
+  const stars = starsFor(score, total);
+  const prev = progress.completed[day] || 0;
+  progress.completed[day] = Math.max(prev, stars);
+  progress.dates[day] = new Date().toISOString();
+  progress.lastActive = new Date().toISOString();
+  await saveProgress();
+  const kid = current.track==='kid';
+  const perfect = score===total;
+  if(stars>=2) bigConfetti();
+  const nextDay = CURRICULUM.find(x=>x.day===day+1);
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="brand" style="font-size:1.1rem"><span class="logo" style="width:34px;height:34px;font-size:1.1rem">🚀</span> Result</div>
+      <div class="whoami" onclick="renderRoadmap()"><span class="dot"></span>${current.ava} ${names[current.key]}<span class="swap">map</span></div>
+    </div>
+    <div class="card result">
+      <div class="big">${perfect?'🏆':(stars>=2?'🎉':'🌟')}</div>
+      <h2>${kid?(perfect?'Superstar!':'Great job!'):(perfect?'Perfect score!':'Nicely done!')}</h2>
+      <div class="score">You got ${score} out of ${total}</div>
+      <div class="starline">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+      <p style="color:var(--ink-soft);font-weight:700">Day ${day} complete \u2014 ${nextDay?`Day ${day+1} is now unlocked!`:'you\u2019ve reached the end of the ready lessons!'}</p>
+      <div class="row">
+        ${score<total?`<button class="btn ghost" onclick="startQuiz(${day})">Try again 🔁</button>`:''}
+        ${nextDay?`<button class="btn" onclick="openDay(${day+1})">Next lesson \u2192</button>`:''}
+        <button class="btn ghost" onclick="renderRoadmap()">Back to map 🗺️</button>
+      </div>
+    </div>`;
+}
+
+/* =================== Confetti =================== */
+const cv=document.getElementById('confetti'), cx=cv.getContext('2d');
+let parts=[], raf=null;
+function resize(){cv.width=innerWidth;cv.height=innerHeight}
+addEventListener('resize',resize);resize();
+const COLORS=['#ff8a3d','#6c5ce7','#2bb673','#ffd27a','#ff5d73','#3db5ff'];
+function spawn(n,spread){
+  for(let i=0;i<n;i++){
+    parts.push({x:innerWidth/2,y:innerHeight*0.35,
+      vx:(Math.random()-0.5)*spread, vy:Math.random()*-12-4,
+      g:0.35+Math.random()*0.2, s:6+Math.random()*8,
+      c:COLORS[i%COLORS.length], rot:Math.random()*6, vr:(Math.random()-0.5)*0.4, life:0});
+  }
+  if(!raf) loop();
+}
+function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life++;
+    cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;
+    cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6);cx.restore();});
+  parts=parts.filter(p=>p.y<innerHeight+40 && p.life<200);
+  if(parts.length) raf=requestAnimationFrame(loop); else {raf=null;cx.clearRect(0,0,cv.width,cv.height);}
+}
+function miniBurst(){ spawn(24,10); }
+function bigConfetti(){ spawn(90,18); }
+
+boot();
+</script>
+</body>
+</html>
